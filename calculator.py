@@ -8,9 +8,6 @@ if conn.is_connected():
 cur=conn.cursor()
 #printing the databases in mysql
 cur.execute('Show databases')
-print('The databases in the server are:')
-for db in cur:
-    print(db)
 
 #dropping existing database hotelmanagement
 cur.execute("drop database hotelmanagement;")
