@@ -97,7 +97,12 @@ def Book_Room():
 
         cur.execute(co,listing)
         conn.commit()
-        print("CUSTOMER DETAILS ADDED SUCCESSFULLY")
+        print()
+        print(" Please wait, your booking is processsing.....")
+        print()
+        import time
+        time.sleep(3)
+        print(" CUSTOMER DETAILS ADDED SUCCESSFULLY")
         menu()
     except:
         mycon.error
