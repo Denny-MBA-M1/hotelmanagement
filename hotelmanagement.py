@@ -35,7 +35,7 @@ cur.execute("insert into HOTEL_RECORDS values(1005, 'Andy Samberg','2022/10/31',
 cur.execute("insert into HOTEL_RECORDS values(1006, 'Pravan Raj','2022/10/31','2022/11/04', 108, 4000, 4)")
 cur.execute("insert into HOTEL_RECORDS values(1007, 'Scaria Fernandes','2022/10/31','2022/11/02', 110, 2000, 2)")
 cur.execute("insert into HOTEL_RECORDS values(1008, 'Maria S','2022/10/31','2022/11/01', 120, 1000, 1)")
-cur.execute("insert into HOTEL_RECORDS values(1009, 'Albin Pinoykumar M.S.K','2022/10/31','2022/11/03', 122, 3000, 3)")
+cur.execute("insert into HOTEL_RECORDS values(1009, 'Albin Pinoybalakumar M.S.K','2022/10/31','2022/11/03', 122, 3000, 3)")
 cur.execute("insert into HOTEL_RECORDS values(1010, 'Harikeshan R.M','2022/10/31','2022/11/02', 123, 2000,2)")
 cur.execute("insert into HOTEL_RECORDS values(1011, 'Leo S.','2022/10/31','2022/11/01', 125, 1000, 1)")
 cur.execute("insert into HOTEL_RECORDS values(1012, 'Hithesh Vazhyamen','2022/10/31','2022/11/02', 130, 2000, 2)")
@@ -102,19 +102,28 @@ def Book_Room():
         print()
         import time
         time.sleep(3)
-        print(" CUSTOMER DETAILS ADDED SUCCESSFULLY")
+        print(" **CUSTOMER DETAILS ADDED SUCCESSFULLY** ")
+        print()
+        print(" GOING BACK TO MENU...\n")
+        time.sleep(2)
+        print()
         menu()
     except:
         mycon.error
         Cust_ID=random.randint(1000,10000)   
 
     
-menu()
-        
-
-                
-                
-                
+def Cancel_Room():
+    try:
+        Id=int(input("Enter the Booking ID of Customer -- :"))
+        listi=(Id,)
+        cnm="delete from hotel_records where id=%s"
+        cur.execute(cnm,listi)
+        conn.commit()
+        menu()
+    except:
+        Id=int(input("Enter the Booking ID of Customer -- :"))  
+menu()        
                 
                 
 
