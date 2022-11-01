@@ -5,6 +5,7 @@ import mysql.connector as mycon
 import pickle
 import random
 
+
 #making connection with mysql
 try:
         conn=mycon.connect(host = "localhost" , user = "root" , password = "yourpasswd")
@@ -12,6 +13,7 @@ try:
 except:
         print("Connection Error")
 
+password1=12345678
 #making connection with the cursor to execute SQL statements        
 cur=conn.cursor()
 
@@ -117,15 +119,18 @@ def Cancel_Room():
         cnm="delete from hotel_records where id=%s"
         data=cur.fetchall()
         while True:
-                Id=int(input("Enter the Booking ID of Customer -- :"))
+                Id=int(input("Enter the Booking ID of Customer -- "))
+                t=(Id,)
                 for row in data:
                         if row[0]==Id:
-                                cur.execute(cnm,Id)
-                                return()
+                               cur.execute(cnm,t)
+                               check=True
                         else:
                                 pass
-                print("ID doesn't exist")
-
+        if check!=True:
+                print("doesn't exist")
+                        
+        
                 
                 
 
@@ -134,7 +139,7 @@ def Search_Book():
                 while True:
                         Id=int(input("Enter the Booking ID you want to search for -- "))
                         da=(Id, )
-                        df="select Cust_ID, Cust_Name, Check_IN, Check_Out from hotel_records where Cust_id=%s;"
+                        df="select Cust_ID, Cust_Name, Check_IN, Check_Out from hotel_records where Cust_ID=%s;"
                         cur.execute(df,da)
                         data=cur.fetchall()
                         for row in data:
@@ -153,7 +158,57 @@ def Search_Book():
                         print("Booking ID doesn't exist")
 
 
+def Edit_Book():
+        
+        
+        while True:
+                Id=int(input("Enter the Booking ID you want to search for -- "))
+                dq=(Id,)
+                dr="select Cust_ID, Cust_Name, Check_IN, Check_Out, Room_ID, Room_Price, No_of_Days from hotel_records where Cust_ID=%s;"
+                cur.execute(dr,dq)
+                data=cur.fetchall()
+                for row in data:
+                        if row[0]==Id:
+                                print("Customer ID - ",row[0],"Name - ", row[1], "Check_IN - ", row[2], "Check_Out - ",row[3], "Room ID - ",row[4], "Room Price - ", row[5],
+                                      "No of days of stay - ", row[6])
+                                print("Enter the changes in the Booking")
+                                custid=print("Customer ID -", row[0])
+                                name=input("Enter the new name -- ")
+                                chck_in=input("Enter the check in date in the format (YYYY,MM,DD)")
+                                chck_out=input("Enter the check out date in the format (YYYY,MM,DD)")
+                                room_id1=int(input("Enter the room ID to be changed"))
+                                days=int(input("Enter the No. of days to stay -- "))
+                                room_price=days*1000
+                                klist=(custid, name, chck_in, chck_out, room_id1, room_price, days)
+                                cj="update hotel_records set Cust_ID=%s, Cust_Name=%s, Check_IN=%s, Check_Out=%s, Room_ID=%s, Room_Price=%s, No_of_Days=%s where Cust_ID=1001"
+                                cur.execute(cj,klist)
+                                conn.commit()
+                                print("Changed")
+                                menu()
+
+                                
+
+def Display_Record():
+        passw=int(input("Enter the password to continue:"))
+        if passw==password1:
+                print("Successfully Authorised")
+                
+                cur.execute("select * from hotel_records")
+                data=cur.fetchall()
+                print()
+                print("Printng Records....")
+                print()
+                import time
+                time.sleep(3)
+                for row in data:
+                       time.sleep(.1) 
+                       print(" ",row,"\n")
+
+
 menu()
+        
+        
+        
                 
         
 
