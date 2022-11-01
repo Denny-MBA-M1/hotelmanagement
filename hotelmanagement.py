@@ -123,7 +123,30 @@ def Cancel_Room():
         menu()
     except:
         Id=int(input("Enter the Booking ID of Customer -- :"))  
-menu()        
                 
                 
 
+def Search_Book():
+        try:
+                Id=int(input("Enter the Booking ID you want to search for -- "))
+                da=(Id, )
+                df="select Cust_ID, Cust_Name, Check_IN, Check_Out from hotel_records where Cust_id=%s;"
+                cur.execute(df,da)
+                data=cur.fetchall()
+                for row in data:
+                        print()
+                        print("Please wait.... Fetching Result")
+                        import time
+                        time.sleep(2)
+                        print("Customer ID -- ", row[0],
+                              " Customer Name -- ", row[1],
+                              "Check-IN Date -- ", row[2],
+                              "Check-OUT Date -- ", row[3])
+        except:
+                print("Invalid Booking ID, please try again")
+                Id=int(input("Enter the Booking ID you want to search for -- "))
+                
+        
+
+menu()
+        
