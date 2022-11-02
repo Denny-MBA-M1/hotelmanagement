@@ -116,19 +116,20 @@ def Book_Room():
 
     
 def Cancel_Room():
-        cnm="delete from hotel_records where Cust_ID=%s"
+        q="delete from hotel_records where Cust_ID=%s"
+        cur.execute('select * from hotel_records')
         data=cur.fetchall()
         while True:
-                Id=int(input("Enter the Booking ID of Customer -- "))
-                t=(Id,)
-                cur.execute(cnm,t)
-                for row in data:
-                        if row[0]==Id:
-                               check=True
-                        else:
-                                pass
-        if check!=True:
-                print("doesn't exist")
+            uid=int(input('Enter the customer id:'))
+            query=q.format(uid)
+            for row in data:
+                if uid==row[0]:
+                    cur.execute(query)
+                    conn.commit()
+                    return
+                else:
+                    continue
+            print('Invalid customer id!')
                         
         
                 
@@ -181,7 +182,7 @@ def Edit_Book():
                                 room_price=days*1000
                                 cst_id=custid
                                 klist=(custid, name, chck_in, chck_out, room_id1, room_price, days,cst_id)
-                                cj="update hotel_records set Cust_ID=%s, Cust_Name=%s, Check_IN=%s, Check_Out=%s, Room_ID=%s, Room_Price=%s, No_of_Days=%s where Cust_ID=%s"
+                                cj="update hotel_records set Cust_ID=%s, Cust_Name=%s, Check_IN=%s, Check_Out=%s, Room_ID=%s, Room_Price=%s, No_of_Days=%s where Cust_ID==%s"
                                 cur.execute(cj,klist)
                                 conn.commit()
                                 print("Changed")
@@ -220,7 +221,14 @@ def export_record():
         pickle.dump(k,bfile) #Writing to binary file
     print('\nHotel Records successfully exported to File!')
     bfile.close()
-    
+    try:
+        bfile=open('hotelmanagement','rb')
+        print('\n*****HOTEL RECORDS IN EXPORTED FILE*****:')
+        while True:
+            g=pickle.load(bfile) #Reading from binary file
+            print(" Id :    ",   g[0]   ,     " Name : ", g[1] ,    " Post : "  , g[2] ,   " Salary : "  , g[3])
+    except EOFError:
+        pass
 
 
 
