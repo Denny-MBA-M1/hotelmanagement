@@ -116,14 +116,14 @@ def Book_Room():
 
     
 def Cancel_Room():
-        cnm="delete from hotel_records where id=%s"
+        cnm="delete from hotel_records where Cust_ID=%s"
         data=cur.fetchall()
         while True:
                 Id=int(input("Enter the Booking ID of Customer -- "))
                 t=(Id,)
+                cur.execute(cnm,t)
                 for row in data:
                         if row[0]==Id:
-                               cur.execute(cnm,t)
                                check=True
                         else:
                                 pass
@@ -179,12 +179,12 @@ def Edit_Book():
                                 room_id1=int(input("Enter the room ID to be changed"))
                                 days=int(input("Enter the No. of days to stay -- "))
                                 room_price=days*1000
-                                klist=(custid, name, chck_in, chck_out, room_id1, room_price, days)
-                                cj="update hotel_records set Cust_ID=%s, Cust_Name=%s, Check_IN=%s, Check_Out=%s, Room_ID=%s, Room_Price=%s, No_of_Days=%s where Cust_ID=1001"
+                                cst_id=custid
+                                klist=(custid, name, chck_in, chck_out, room_id1, room_price, days,cst_id)
+                                cj="update hotel_records set Cust_ID=%s, Cust_Name=%s, Check_IN=%s, Check_Out=%s, Room_ID=%s, Room_Price=%s, No_of_Days=%s where Cust_ID=%s"
                                 cur.execute(cj,klist)
                                 conn.commit()
                                 print("Changed")
-                                menu()
 
                                 
 
@@ -201,8 +201,29 @@ def Display_Record():
                 import time
                 time.sleep(3)
                 for row in data:
+                       list(row) 
                        time.sleep(.1) 
                        print(" ",row,"\n")
+        else:
+                print()
+                print("Password incorrect\n")
+                print("Returning to HOME....\n")
+                import time
+                time.sleep(1)
+
+def export_record():    
+    bfile=open('hotelmanagement.dat','wb')
+    cur.execute('select * from hotel_records')
+    data=cur.fetchall()
+    for i in data:
+        k=list(i)
+        pickle.dump(k,bfile) #Writing to binary file
+    print('\nHotel Records successfully exported to File!')
+    bfile.close()
+    
+
+
+
 
 
 menu()
