@@ -8,7 +8,7 @@ import random
 
 #making connection with mysql
 try:
-        conn=mycon.connect(host = "localhost" , user = "root" , password = "yourpasswd")
+        conn=mycon.connect(host = "localhost" , user = "root" ,database="hotelmanagement", password="yourpasswd")
         print("Connected")
 except:
         print("Connection Error")
@@ -16,13 +16,7 @@ except:
 password1=12345678
 #making connection with the cursor to execute SQL statements        
 cur=conn.cursor()
-
-#in order to run the code myltiple times the existing database should be removed and recreated again
-cur.execute('drop database hotelmanagement;')
-cur.execute('create database hotelmanagement')
-
-#using the database hotelmanagement
-cur.execute('use hotelmanagement;')
+cur.execute('drop table hotel_records')
 
 #creating table hotel_records
 cur.execute("create table HOTEL_RECORDS(Cust_ID int primary key unique, Cust_Name varchar(40), Check_IN date, Check_Out date, Room_ID int, Room_Price int, No_of_Days int );")
@@ -121,11 +115,12 @@ def Cancel_Room():
         data=cur.fetchall()
         while True:
             uid=int(input('Enter the customer id:'))
-            query=q.format(uid)
+            t=(uid,)
             for row in data:
                 if uid==row[0]:
-                    cur.execute(query)
+                    cur.execute(q,t)
                     conn.commit()
+                    print("Successfully cancelled Booking")
                     return
                 else:
                     continue
@@ -163,30 +158,27 @@ def Edit_Book():
         
         
         while True:
-                Id=int(input("Enter the Booking ID you want to search for -- "))
-                dq=(Id,)
-                dr="select Cust_ID, Cust_Name, Check_IN, Check_Out, Room_ID, Room_Price, No_of_Days from hotel_records where Cust_ID=%s;"
-                cur.execute(dr,dq)
+                Id=int(input("Enter your Customer id -- "))
+                cur.execute('select * from hotel_records')
                 data=cur.fetchall()
                 for row in data:
                         if row[0]==Id:
                                 print("Customer ID - ",row[0],"Name - ", row[1], "Check_IN - ", row[2], "Check_Out - ",row[3], "Room ID - ",row[4], "Room Price - ", row[5],
                                       "No of days of stay - ", row[6])
-                                print("Enter the changes in the Booking")
-                                custid=print("Customer ID -", row[0])
+                                print("Enter the new changes in the Booking")
                                 name=input("Enter the new name -- ")
                                 chck_in=input("Enter the check in date in the format (YYYY,MM,DD)")
                                 chck_out=input("Enter the check out date in the format (YYYY,MM,DD)")
                                 room_id1=int(input("Enter the room ID to be changed"))
                                 days=int(input("Enter the No. of days to stay -- "))
                                 room_price=days*1000
-                                cst_id=custid
-                                klist=(custid, name, chck_in, chck_out, room_id1, room_price, days,cst_id)
-                                cj="update hotel_records set Cust_ID=%s, Cust_Name=%s, Check_IN=%s, Check_Out=%s, Room_ID=%s, Room_Price=%s, No_of_Days=%s where Cust_ID==%s"
+                                cst_id=Id
+                                klist=(name, chck_in, chck_out, room_id1, room_price, days,cst_id)
+                                cj="update hotel_records set Cust_Name=%s, Check_IN=%s, Check_Out=%s, Room_ID=%s, Room_Price=%s, No_of_Days=%s where Cust_ID=%s"
                                 cur.execute(cj,klist)
                                 conn.commit()
                                 print("Changed")
-
+                                return
                                 
 
 def Display_Record():
@@ -226,7 +218,7 @@ def export_record():
         print('\n*****HOTEL RECORDS IN EXPORTED FILE*****:')
         while True:
             g=pickle.load(bfile) #Reading from binary file
-            print(" Id :    ",   g[0]   ,     " Name : ", g[1] ,    " Post : "  , g[2] ,   " Salary : "  , g[3])
+            print(" Customer ID --   ",   g[0]   ," Customer Name : ", g[1] ,"Check_IN -- "  , g[2] ,   "Check_Out -- "  , g[3], "Room_ID -- ", g[4], "Room_Price -- ", g[5], "No_of_Days", g[6])
     except EOFError:
         pass
 
