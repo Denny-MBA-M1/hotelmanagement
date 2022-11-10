@@ -6,6 +6,7 @@ import pickle
 import random
 
 
+
 #making connection with mysql
 try:
         conn=mycon.connect(host = "localhost" , user = "root" ,database="hotelmanagement", password="yourpasswd")
@@ -120,7 +121,12 @@ def Cancel_Room():
                 if uid==row[0]:
                     cur.execute(q,t)
                     conn.commit()
-                    print("Successfully cancelled Booking")
+                    print()
+                    print(" Successfully cancelled Booking")
+                    print()
+                    print(" GOING BACK TO MENU...\n")
+                    import time
+                    time.sleep(1)
                     return
                 else:
                     continue
@@ -148,6 +154,11 @@ def Search_Book():
                                               " Customer Name -- ", row[1],
                                               "Check-IN Date -- ", row[2],
                                               "Check-OUT Date -- ", row[3])
+                                        print()
+                                        fdr=input("Press Enter to return to Menu\n")
+                                        print(" GOING BACK TO MENU...\n")
+                                        import time
+                                        time.sleep(2)
                                         return()
                                 else:
                                         pass
@@ -177,7 +188,11 @@ def Edit_Book():
                                 cj="update hotel_records set Cust_Name=%s, Check_IN=%s, Check_Out=%s, Room_ID=%s, Room_Price=%s, No_of_Days=%s where Cust_ID=%s"
                                 cur.execute(cj,klist)
                                 conn.commit()
-                                print("Changed")
+                                print()
+                                print("The Booking has been successfully edited\n")
+                                print(" GOING BACK TO MENU...\n")
+                                import time
+                                time.sleep(2)
                                 return
                                 
 
@@ -200,11 +215,12 @@ def Display_Record():
         else:
                 print()
                 print("Password incorrect\n")
-                print("Returning to HOME....\n")
+                print("GOING BACK TO MENU")
                 import time
                 time.sleep(1)
 
-def export_record():    
+def export_record():
+    passw=int(input("Enter the password to continue:"))
     bfile=open('hotelmanagement.dat','wb')
     cur.execute('select * from hotel_records')
     data=cur.fetchall()
@@ -215,7 +231,7 @@ def export_record():
     bfile.close()
     try:
         bfile=open('hotelmanagement.dat','rb')
-        print('\n*****HOTEL RECORDS IN EXPORTED FILE*****:')
+        print('\nHOTEL RECORDS IN EXPORTED FILE\n')
         while True:
             g=pickle.load(bfile) #Reading from binary file
             print(" Customer ID --   ",   g[0]   ," Customer Name : ", g[1] ,"Check_IN -- "  , g[2] ,   "Check_Out -- "  , g[3], "Room_ID -- ", g[4], "Room_Price -- ", g[5], "No_of_Days", g[6])
