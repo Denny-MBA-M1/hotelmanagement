@@ -214,7 +214,7 @@ def export_record():
     print('\nHotel Records successfully exported to File!')
     bfile.close()
     try:
-        bfile=open('hotelmanagement','rb')
+        bfile=open('hotelmanagement.dat','rb')
         print('\n*****HOTEL RECORDS IN EXPORTED FILE*****:')
         while True:
             g=pickle.load(bfile) #Reading from binary file
