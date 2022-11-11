@@ -21,12 +21,16 @@ cur=conn.cursor()
 
 #Creating a database and dropping the database in case the database already exists
 try:
-    cur.execute("drop database hotelmanagement")
-except:
     cur.execute("create database hotelmanagement")
+    cur.execute("use hotelmanagement")
+except:
+        cur.execute("drop database hotelmanagement")
+        cur.execute("create database hotelmanagement")
+        cur.execute("use hotelmanagement")
+    
 
 
-cur.execute("use hotelmanagement")
+
 
 #Creating table hotel_records to store the records of customers
 cur.execute("create table HOTEL_RECORDS(Cust_ID int primary key unique, Cust_Name varchar(40), Check_IN date, Check_Out date, Room_ID int, Room_Price int, No_of_Days int );")
@@ -239,14 +243,14 @@ def export_record():
     data=cur.fetchall()
     for i in data:
         k=list(i)
-        pickle.dump(k,bfile) #Writing to binary file
+        pickle.dump(k,bfile) 
     print('\nHotel Records successfully exported to File!')
     bfile.close()
     try:
         bfile=open('hotelmanagement.dat','rb')
         print('\nHOTEL RECORDS IN EXPORTED FILE\n')
         while True:
-            g=pickle.load(bfile) #Reading from binary file
+            g=pickle.load(bfile) 
             print(" Customer ID --   ",   g[0]   ," Customer Name : ", g[1] ,"Check_IN -- "  , g[2] ,   "Check_Out -- "  , g[3], "Room_ID -- ", g[4], "Room_Price -- ", g[5], "No_of_Days", g[6])
     except EOFError:
         pass
