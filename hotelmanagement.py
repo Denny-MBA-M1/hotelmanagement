@@ -1,25 +1,34 @@
 
 #importing mysql connector and naming as mycon
 import mysql.connector as mycon
-#importing pickle
+#importing pickle module
 import pickle
+#import random module
 import random
 
 
 
-#making connection with mysql
+#establishing connection with MYSQL
 try:
-        conn=mycon.connect(host = "localhost" , user = "root" ,database="hotelmanagement", password="yourpasswd")
+        conn=mycon.connect(host = "localhost" , user = "root" , password="yourpasswd")
         print("Connected")
 except:
         print("Connection Error")
 
 password1=12345678
-#making connection with the cursor to execute SQL statements        
+#Establishing connection with the cursor to execute SQL statements        
 cur=conn.cursor()
-cur.execute('drop table hotel_records')
 
-#creating table hotel_records
+#Creating a database and dropping the database in case the database already exists
+try:
+    cur.execute("drop database hotelmanagement")
+except:
+    cur.execute("create database hotelmanagement")
+
+
+cur.execute("use hotelmanagement")
+
+#Creating table hotel_records to store the records of customers
 cur.execute("create table HOTEL_RECORDS(Cust_ID int primary key unique, Cust_Name varchar(40), Check_IN date, Check_Out date, Room_ID int, Room_Price int, No_of_Days int );")
 
 #inserting values into the table of hotel_records
@@ -75,7 +84,11 @@ def menu():
                 elif c == 6:
                     export_record()
                 elif c == 7:
-                    exit(0)
+                    print("Are you sure you want to leave?\n")
+                    dc=input("Press enter to conitinue.\n")
+                    print("THANK YOU FOR VISITING CDE HOTELS, HOPE YOU HAD A WONDERFUL TIME")
+                   
+                    break
                 else:
                     print("Invalid Choice")
 
